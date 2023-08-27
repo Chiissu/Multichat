@@ -1,0 +1,22 @@
+{
+  "name": "nebula-fb",
+  "module": "index.ts",
+  "type": "module",
+  "scripts": {
+    "start": "bun ./index.ts",
+    "genEnv": "sh ./scripts/genEnv.sh"
+  },
+  "devDependencies": {
+    "bun-types": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "discord.js": "^14.13.0",
+    "dotenv": "^16.3.1",
+    "guilded.js": "^0.23.5",
+    "socket.io": "^4.7.2",
+    "socket.io-client": "^4.7.2"
+  }
+}
