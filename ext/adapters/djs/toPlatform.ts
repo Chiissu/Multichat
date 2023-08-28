@@ -29,16 +29,18 @@ export function embedRebuild(embed: Embed) {
     color: embed.color,
   });
 
-  if (embed.author) discordEmbed.setAuthor({
-    name: embed.author.name,
-    iconURL: embed.author.icon,
-    url: embed.author.link,
-  });
+  if (embed.author)
+    discordEmbed.setAuthor({
+      name: embed.author.name,
+      iconURL: embed.author.icon,
+      url: embed.author.link,
+    });
 
-  if (embed.footer) discordEmbed.setFooter({
-    text: embed.footer.text,
-    iconURL: embed.footer.icon,
-  });
+  if (embed.footer)
+    discordEmbed.setFooter({
+      text: embed.footer.text,
+      iconURL: embed.footer.icon,
+    });
 
   return discordEmbed;
 }

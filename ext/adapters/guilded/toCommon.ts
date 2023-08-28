@@ -4,10 +4,13 @@ import { contentToMessage } from "./toPlatform";
 
 export function adaptMessage(message: GuildedMessage, client: Client): Message {
   return {
+    platform: "guilded",
     content: message.content as string,
     author: {
       name: message.author?.name ?? null,
       isBot: message.author?.type == UserType.Bot,
+      id: message.author?.id ?? "",
+      avatarURL: message.author?.avatar ?? null,
     },
     mentions: {
       me:
@@ -16,6 +19,7 @@ export function adaptMessage(message: GuildedMessage, client: Client): Message {
           : false,
       everyone: message.mentions?.everyone ?? false,
     },
+	id: message.id,
     reply: (content) => {
       let remappedContent = contentToMessage(content);
       remappedContent && message.reply(remappedContent);

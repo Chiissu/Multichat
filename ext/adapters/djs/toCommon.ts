@@ -4,8 +4,14 @@ import { messageRebuild } from "./toPlatform";
 
 export function adaptMessage(message: DiscordMessage, client: Client): Message {
   return {
+    platform: "discord",
     content: message.content,
-    author: { name: message.author.displayName, isBot: message.author.bot },
+    author: {
+      name: message.author.displayName,
+      isBot: message.author.bot,
+      id: message.author.id,
+      avatarURL: message.author.avatarURL(),
+    },
     mentions: {
       me:
         client.user && message.mentions.members
@@ -13,6 +19,7 @@ export function adaptMessage(message: DiscordMessage, client: Client): Message {
           : false,
       everyone: message.mentions.everyone,
     },
+	id: message.id,
     reply: (content) => {
       let remappedContent = messageRebuild(content);
       remappedContent && message.reply(remappedContent);
