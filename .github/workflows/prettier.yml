@@ -17,4 +17,4 @@ jobs:
         run: npm install --global prettier@latest
 
       - name: Prettier check
-        run: prettier --check '**/*.ts' '**/*.json' --ignore-path .gitignore || (echo "Prettier check failed." && exit 1) && echo "Prettier check passed." && exit 0
+        run: prettier --check '**/*.ts' '**/*.json' --ignore-path .gitignore --ignore-path .prettierignore || (echo \"Prettier check failed.\" && exit 1) && echo \"Prettier check passed.\" && exit 0
