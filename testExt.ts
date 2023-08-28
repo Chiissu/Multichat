@@ -45,7 +45,7 @@ self.addEventListener("message", (config) => {
           "https://cdn.discordapp.com/avatars/1079612529589895260/eb824c724e34ef139686b642fdd616bf.webp",
         contents: [
           { key: "Made by", value: "Frox!" },
-          { key: "Version", value: "0.2", inline: true },
+          { key: "Version", value: "0.2-dev", inline: true },
           { key: "Vendor", value: "TroxCorp", inline: true },
           "",
           { key: "Organised", value: "Nebula Corporation", inline: true },

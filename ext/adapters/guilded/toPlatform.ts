@@ -27,16 +27,8 @@ export function embedRebuild(embed: Embed) {
     color: embed.color,
   });
 
-  if (embed.author) guildedEmbed.setAuthor({
-    name: embed.author.name,
-    iconURL: embed.author.icon,
-    url: embed.author.link,
-  });
-
-  if (embed.footer) guildedEmbed.setFooter({
-    text: embed.footer.text,
-    iconURL: embed.footer.icon,
-  });
+  if (embed.author) guildedEmbed.setAuthor(embed.author.name, embed.author.icon, embed.author.link);
+  if (embed.footer) guildedEmbed.setFooter(embed.footer.text, embed.footer.icon);
 
   return guildedEmbed;
 }
