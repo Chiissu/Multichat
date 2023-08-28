@@ -7,10 +7,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v3
 
-      - name: Run Prettier Check
-        uses: rutajdash/prettier-cli-action@v1.0.1
-        with:
-          file_pattern: '**/*.ts'
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+
+      - name: Install prettier
+        run: npm install --global prettier@latest
+
+      - name: Prettier check
+        run: prettier --check '**/*.ts' '**/*.json' --ignore-path .gitignore || (echo "Prettier check failed." && exit 1) && echo "Prettier check passed." && exit 0
