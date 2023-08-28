@@ -1,6 +1,6 @@
 import { Message } from "../";
 import { Client, Message as DiscordMessage } from "discord.js";
-import { contentToMessage } from "./toPlatform";
+import { messageRebuild } from "./toPlatform";
 
 export function adaptMessage(message: DiscordMessage, client: Client): Message {
   return {
@@ -14,11 +14,11 @@ export function adaptMessage(message: DiscordMessage, client: Client): Message {
       everyone: message.mentions.everyone,
     },
     reply: (content) => {
-      let remappedContent = contentToMessage(content);
+      let remappedContent = messageRebuild(content);
       remappedContent && message.reply(remappedContent);
     },
     send: (content) => {
-      let remappedContent = contentToMessage(content);
+      let remappedContent = messageRebuild(content);
       remappedContent && message.channel.send(remappedContent);
     },
   };

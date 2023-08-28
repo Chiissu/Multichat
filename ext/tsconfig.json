@@ -14,7 +14,7 @@
     "forceConsistentCasingInFileNames": true,
     "allowJs": true,
     "noEmit": true,
-	"strictPropertyInitialization": false,
+	  "strictPropertyInitialization": false,
     "types": [
       "bun-types" // add Bun global
     ]

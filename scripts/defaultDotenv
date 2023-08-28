@@ -1,2 +1,4 @@
 DISCORD_TOKEN=""
 GUILDED_TOKEN=""
+# DEV or empty
+ENV=""

@@ -1,6 +1,6 @@
 # Multichat
 
-Brought to you by ChiissuOrg and the [Nebula Team](https://discord.gg/7Px37vZy2M).
+Brought to you by ChiissuOrg and the [Nebula Team](https://discord.gg/7RdABJhQss).
 
 > This code was written to be part of the Nebula bot, but it didn't get
 > merged. Therefore, I decided to make it a bit more standalone and publish
