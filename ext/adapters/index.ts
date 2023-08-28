@@ -38,7 +38,7 @@ export class Embed implements EmbedData {
         : content.author;
     this.title = content?.title;
     this.link = content?.link;
-	this.description = content?.description;
+	  this.description = content?.description;
     this.thumbnail =
       typeof content?.thumbnail == "string"
         ? { url: content.thumbnail }

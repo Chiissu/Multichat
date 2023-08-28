@@ -12,7 +12,7 @@ export function adaptMessage(message: GuildedMessage, client: Client): Message {
     mentions: {
       me:
         client.user && message.mentions?.users
-          ? message.mentions?.users.some((user) => user.id == client.user.id)
+          ? message.mentions?.users.some((user) => user.id == client.user?.id)
           : false,
       everyone: message.mentions?.everyone ?? false,
     },
