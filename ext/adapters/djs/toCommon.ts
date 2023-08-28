@@ -19,7 +19,7 @@ export function adaptMessage(message: DiscordMessage, client: Client): Message {
           : false,
       everyone: message.mentions.everyone,
     },
-	id: message.id,
+    id: message.id,
     reply: (content) => {
       let remappedContent = messageRebuild(content);
       remappedContent && message.reply(remappedContent);

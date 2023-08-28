@@ -19,7 +19,7 @@ export function adaptMessage(message: GuildedMessage, client: Client): Message {
           : false,
       everyone: message.mentions?.everyone ?? false,
     },
-	id: message.id,
+    id: message.id,
     reply: (content) => {
       let remappedContent = contentToMessage(content);
       remappedContent && message.reply(remappedContent);
