@@ -16,49 +16,52 @@ self.addEventListener("message", (config) => {
       socket.emit("reply", "No, he is NOT a weeb", refID);
     }
 
-    if (message.mentions.everyone) socket.emit(
-      "reply",
-      "https://tenor.com/view/discord-meme-nichijou-everyone-anime-gif-16416228",
-      refID,
-    );
+    if (message.mentions.everyone)
+      socket.emit(
+        "reply",
+        "https://tenor.com/view/discord-meme-nichijou-everyone-anime-gif-16416228",
+        refID,
+      );
 
-    if (message.mentions.me) socket.emit(
-      "reply",
-      "https://tenor.com/view/discord-triggered-notification-angry-dog-noises-dog-girl-gif-11710406",
-      refID,
-    );
+    if (message.mentions.me)
+      socket.emit(
+        "reply",
+        "https://tenor.com/view/discord-triggered-notification-angry-dog-noises-dog-girl-gif-11710406",
+        refID,
+      );
 
-    if (message.content.toLowerCase() == "fnw!info") socket.emit(
-      "reply",
-      new Embed({
-        title: "Bot information",
-		    description: "You forcing me to stalk on myself lmao",
-        author: {
-          name: "Frox",
-          icon: "https://cdn.discordapp.com/avatars/958981729153089566/4ec4ae50d2d8373652cf9fd2adc5e470.webp",
-          link: "https://github.com/froxcey/",
-        },
-        link: "https://github.com/Chiissu/Nebula",
-        thumbnail:
-          "https://github.com/Avdan-OS/Compositor/assets/51555391/d0379882-f2dc-42e1-962f-b3f122db656f",
-        image:
-          "https://cdn.discordapp.com/avatars/1079612529589895260/eb824c724e34ef139686b642fdd616bf.webp",
-        contents: [
-          { key: "Made by", value: "Frox!" },
-          { key: "Version", value: "0.2-dev", inline: true },
-          { key: "Vendor", value: "TroxCorp", inline: true },
-          "",
-          { key: "Organised", value: "Nebula Corporation", inline: true },
-          { key: "License", value: "All rights reserved", inline: true },
-        ],
-        color: 0x696969,
-        timestamp: true,
-        footer: {
-          text: "ChiissuOrg",
-          icon: "https://cdn.discordapp.com/icons/1079612082636472420/b8d7ae70d84a52eedb2d36d2e5ffd28b.webp",
-        },
-      }),
-      refID,
-    );
+    if (message.content.toLowerCase() == "fnw!info")
+      socket.emit(
+        "reply",
+        new Embed({
+          title: "Bot information",
+          description:
+            message.author.name + " forcing me to stalk on myself lmao",
+          author: {
+            name: "Frox",
+            icon: "https://cdn.discordapp.com/avatars/958981729153089566/4ec4ae50d2d8373652cf9fd2adc5e470.webp",
+            link: "https://github.com/froxcey/",
+          },
+          link: "https://github.com/Chiissu/Nebula",
+          thumbnail: message.author.avatarURL,
+          image:
+            "https://cdn.discordapp.com/avatars/1079612529589895260/eb824c724e34ef139686b642fdd616bf.webp",
+          contents: [
+            { key: "Made by", value: "Frox!" },
+            { key: "Version", value: "0.2-dev", inline: true },
+            { key: "Vendor", value: "TroxCorp", inline: true },
+            "",
+            { key: "Organised", value: "Nebula Corporation", inline: true },
+            { key: "License", value: "All rights reserved", inline: true },
+          ],
+          color: 0x696969,
+          timestamp: true,
+          footer: {
+            text: "ChiissuOrg",
+            icon: "https://cdn.discordapp.com/icons/1079612082636472420/b8d7ae70d84a52eedb2d36d2e5ffd28b.webp",
+          },
+        }),
+        refID,
+      );
   });
 });

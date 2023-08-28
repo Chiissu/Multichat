@@ -5,7 +5,8 @@
   "homepage": "https://github.com/Chiissu/multichat",
   "scripts": {
     "start": "bun ./index.ts",
-    "genEnv": "sh ./scripts/genEnv.sh"
+    "genEnv": "sh ./scripts/genEnv.sh",
+    "styleCheck": "bunx prettier --check '**/*.ts' '**/*.json' --ignore-path .gitignore --ignore-path .prettierignore || (echo \"Prettier check failed.\" && exit 1) && echo \"Prettier check passed.\" && exit 0"
   },
   "devDependencies": {
     "bun-types": "latest"

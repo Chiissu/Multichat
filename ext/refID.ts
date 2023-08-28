@@ -1,4 +1,4 @@
-import { Ok, Err, Result } from 'ts-results';
+import { Ok, Err, Result } from "ts-results";
 
 export default class refID<itemType> {
   private lifetime: number;
@@ -35,8 +35,7 @@ export default class refID<itemType> {
    */
   get(id: string): Result<itemType, "ItemNotFound"> {
     let item = this.storage.get(id);
-	if (!item) return Err("ItemNotFound");
-	return Ok(item)
+    if (!item) return Err("ItemNotFound");
+    return Ok(item);
   }
 }
-

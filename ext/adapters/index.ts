@@ -5,6 +5,8 @@ export type MessageContent = string | { baseU64: string } | Embed;
 export interface User {
   name: string | null;
   isBot: boolean | null;
+  id: string;
+  avatarURL: string | null;
 }
 
 interface EmbedData {
@@ -38,7 +40,7 @@ export class Embed implements EmbedData {
         : content.author;
     this.title = content?.title;
     this.link = content?.link;
-	  this.description = content?.description;
+    this.description = content?.description;
     this.thumbnail =
       typeof content?.thumbnail == "string"
         ? { url: content.thumbnail }
@@ -61,12 +63,14 @@ export class Embed implements EmbedData {
 }
 
 export interface Message {
+  platform: "discord" | "guilded";
   content: string;
   author: User;
   mentions: {
     me: boolean;
     everyone: boolean;
   };
+  id: string;
   reply: (content: MessageContent) => void;
   send: (content: MessageContent) => void;
 }
