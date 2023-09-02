@@ -53,7 +53,6 @@ if (RUN.indexOf("GUILDED") != -1 && process.env.GUILDED_TOKEN) {
 // Start the extension protocol
 let controller: ExtController = {
   extAuth: (extInfo) => {
-    if (!extInfo) return false;
     if (extInfo.id == "Chi.TestExt" && extInfo.token == "test-token") {
       console.log("Test extension connected");
       return true;
