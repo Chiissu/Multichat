@@ -51,7 +51,19 @@ if (RUN.indexOf("GUILDED") != -1 && process.env.GUILDED_TOKEN) {
 }
 
 // Start the extension protocol
-let controller = new ExtController();
+let controller: ExtController = {
+  extAuth: (extInfo) => {
+    if (!extInfo) return false;
+    if (extInfo.id == "Chi.TestExt" && extInfo.token == "test-token") {
+      console.log("Test extension connected");
+      return true;
+    }
+    console.log(
+      `Extensions ${extInfo.id} has invalid authentication, kicking extension`,
+    );
+    return false;
+  },
+};
 new ExtHandler(controller, { port: PORT }).registerClients(clients);
 
 // Launch example extension

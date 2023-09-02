@@ -1,10 +1,21 @@
 import { io } from "socket.io-client";
 import { Embed } from "./ext";
 
+let auth = {
+  name: "Test Ext",
+  id: "Chi.TestExt",
+  token: "test-token", // Normally, the token should be in a .env file
+};
+
 self.addEventListener("message", (config) => {
-  let socket = io("ws://localhost:" + config.data.port);
+  let socket = io("ws://localhost:" + config.data.port, {
+    extraHeaders: { auth: JSON.stringify(auth) },
+  });
   socket.on("connect", () => {
     console.log("[Ext]: Connected to extension host");
+  });
+  socket.on("disconnect", () => {
+    console.log("[Ext]: Socket disconnected");
   });
 
   socket.on("messageCreate", (message, refID) => {

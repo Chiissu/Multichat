@@ -10,7 +10,9 @@ interface ExtConfig {
   port?: number;
 }
 
-export class ExtController {}
+export interface ExtController {
+  extAuth: (info?: { name?: string; id?: string; token?: string }) => boolean;
+}
 
 export class ExtHandler {
   socket: Server;
@@ -20,6 +22,13 @@ export class ExtHandler {
     this.socket = new Server();
     this.socket.listen(config?.port || 4334);
     this.socket.on("connection", (socket) => {
+      let auth = socket.handshake.headers.auth;
+      if (
+        !controller.extAuth(
+          typeof auth == "string" ? JSON.parse(auth) : undefined,
+        )
+      )
+        return socket.disconnect(true);
       socket.on("reply", (content, refID) => {
         let message = this.refID.get(refID);
         if (message.err) return console.error(message.val);
