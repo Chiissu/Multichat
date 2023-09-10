@@ -69,6 +69,10 @@ export class ExtHandler {
         if (message.err) return console.error(message.val);
         message.val.send(content);
       });
+      socket.onAny((eventName: string, ...args) => {
+        if (["reply", "sendMessage"].includes(eventName)) return;
+        this.socket.emit(authData.val.id + ":" + eventName, ...args);
+      });
     });
   }
   registerClients(clients: BaseAdapter[]) {

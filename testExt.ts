@@ -74,5 +74,10 @@ self.addEventListener("message", (config) => {
         }),
         refID,
       );
+
+    if (message.content == "Chiissu!") socket.emit("Greet", message, refID);
+  });
+  socket.on("Chi.TestExt:Greet", (message, refID) => {
+    socket.emit("reply", `> ${message.content} \nちーっす！`, refID);
   });
 });
