@@ -19,6 +19,7 @@
     "dotenv": "^16.3.1",
     "guilded.js": "^0.23.5",
     "socket.io": "^4.7.2",
-    "socket.io-client": "^4.7.2"
+    "socket.io-client": "^4.7.2",
+    "valibot": "^0.13.1"
   }
 }
