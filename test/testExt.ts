@@ -1,5 +1,5 @@
 import { io } from "socket.io-client";
-import { Embed } from "./ext";
+import { Embed } from "../src";
 
 let auth = {
   name: "Test Ext",

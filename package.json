@@ -1,10 +1,10 @@
 {
-  "name": "nebula-fb",
-  "module": "index.ts",
+  "name": "multichat",
+  "module": "src/index.ts",
   "type": "module",
   "homepage": "https://github.com/Chiissu/multichat",
   "scripts": {
-    "start": "bun ./index.ts",
+    "start": "bun ./test/index.ts",
     "genEnv": "sh ./scripts/genEnv.sh",
     "styleCheck": "bunx prettier --check '**/*.ts' '**/*.json' --ignore-path .gitignore --ignore-path .prettierignore || (echo \"Prettier check failed.\" && exit 1) && echo \"Prettier check passed.\" && exit 0"
   },

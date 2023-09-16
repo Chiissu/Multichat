@@ -12,11 +12,11 @@ import {
   GuildedAdapter,
   ExtController,
   BaseAdapter,
-} from "./ext";
+} from "../src";
 import { readFileSync } from "fs";
 import "dotenv/config";
 
-console.log(readFileSync("./Chiissu").toString());
+console.log(readFileSync(import.meta.dir + "/Chiissu").toString());
 
 const PORT = 4664;
 const RUN = ["GUILDED", "DJS"];
