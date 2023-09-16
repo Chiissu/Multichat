@@ -6,20 +6,23 @@
   "scripts": {
     "start": "bun ./test/index.ts",
     "genEnv": "sh ./scripts/genEnv.sh",
-    "styleCheck": "bunx prettier --check '**/*.ts' '**/*.json' --ignore-path .gitignore --ignore-path .prettierignore || (echo \"Prettier check failed.\" && exit 1) && echo \"Prettier check passed.\" && exit 0"
+    "styleCheck": "bunx prettier --check '**/*.ts' '**/*.json' --ignore-path .gitignore --ignore-path .prettierignore || (echo \"Prettier check failed.\" && exit 1) && echo \"Prettier check passed.\" && exit 0",
+    "build": "bun "
   },
   "devDependencies": {
-    "bun-types": "latest"
+    "bun-types": "latest",
+    "discord.js": "^14.13.0",
+    "dotenv": "^16.3.1",
+    "guilded.js": "^0.23.5",
+    "prettier": "^3.0.3",
+    "socket.io-client": "^4.7.2"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "discord.js": "^14.13.0",
-    "dotenv": "^16.3.1",
-    "guilded.js": "^0.23.5",
     "socket.io": "^4.7.2",
-    "socket.io-client": "^4.7.2",
+    "ts-results": "^3.3.0",
     "valibot": "^0.13.1"
   }
 }
