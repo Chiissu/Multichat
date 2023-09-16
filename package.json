@@ -9,7 +9,7 @@
     "styleCheck": "bunx prettier --check '**/*.ts' '**/*.json' --ignore-path .gitignore --ignore-path .prettierignore || (echo \"Prettier check failed.\" && exit 1) && echo \"Prettier check passed.\" && exit 0"
   },
   "devDependencies": {
-    "bun-types": "latest",
+    "bun-types": "^1.0.2",
     "discord.js": "^14.13.0",
     "dotenv": "^16.3.1",
     "guilded.js": "^0.23.5",
@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "socket.io": "^4.7.2",
+    "strict-event-emitter": "^0.5.0",
     "ts-results": "^3.3.0",
     "valibot": "^0.13.1"
   }
