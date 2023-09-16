@@ -12,8 +12,6 @@ jobs:
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
-        with:
-          cache: 'npm'
 
       - name: Install prettier
         run: npm install --global prettier@latest
