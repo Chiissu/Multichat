@@ -91,7 +91,9 @@ export type AdapterEvents = {
   commandInteraction: [interaction: CommandInteraction];
 };
 
-export class ConcreteBaseAdapter extends Emitter<AdapterEvents> {}
+export class ConcreteBaseAdapter extends Emitter<AdapterEvents> {
+  fallbackPrefix: string;
+}
 
 export abstract class BaseAdapter extends ConcreteBaseAdapter {
   registerCommand(commandInfo: CommandInfo): void {}

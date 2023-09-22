@@ -10,6 +10,7 @@ export { Embed } from "./adapters";
 
 interface ExtConfig {
   port?: number;
+  fallbackPrefix?: string;
 }
 
 interface ExtInfo {
@@ -43,14 +44,16 @@ function parseExtInfo(
 
 export interface ExtController {
   extAuth: (info: ExtInfo) => boolean;
+  canRegisterCommand: (info: ExtInfo) => boolean;
 }
 
 export class ExtHandler {
   socket: Server;
   clients: BaseAdapter[] = [];
   refID = new RefID<any>();
+  config: ExtConfig;
   constructor(controller: ExtController, config?: ExtConfig) {
-    // Create Socket here
+    this.config = config ?? {};
     this.socket = new Server();
     this.socket.listen(config?.port || 4334);
     this.socket.on("connection", (socket) => {
@@ -72,33 +75,48 @@ export class ExtHandler {
         message.val.send(content);
       });
 
-      socket.on("registerCommand", (config)=>{
+      socket.on("registerCommand", (config) => {
+        if (!controller.canRegisterCommand(authData)) return;
         for (let client of this.clients) {
-          client.registerCommand(config)
+          client.registerCommand(config);
+          client.on("commandInteraction", (interaction) => {
+            if (interaction.name != config.name) return;
+            this.socket.emit(
+              "commandInteraction",
+              interaction,
+              this.refID.cache(interaction),
+            );
+          });
         }
-      })
+      });
 
       socket.on("interactionReply", (content, refID) => {
         let interaction = this.refID.get(refID);
         if (interaction.err) return console.log(interaction.val);
         interaction.val.reply(content);
-      })
+      });
 
       socket.onAny((eventName: string, ...args) => {
-        if (["reply", "sendMessage", "registerCommand", "interactionReply"].includes(eventName)) return;
+        if (
+          [
+            "reply",
+            "sendMessage",
+            "registerCommand",
+            "interactionReply",
+          ].includes(eventName)
+        )
+          return;
         this.socket.emit(authData.val.id + ":" + eventName, ...args);
       });
     });
   }
   registerClients(clients: BaseAdapter[]) {
     for (let client of clients) {
+      client.fallbackPrefix = this.config.fallbackPrefix ?? "!";
       this.clients.push(client);
       client.on("messageCreate", (message) => {
         this.socket.emit("messageCreate", message, this.refID.cache(message));
       });
-      client.on("commandInteraction", (interaction) => {
-        this.socket.emit("commandInteraction", interaction, this.refID.cache(interaction))
-      })
     }
   }
 }
