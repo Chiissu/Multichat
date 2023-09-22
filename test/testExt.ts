@@ -80,4 +80,20 @@ self.addEventListener("message", (config) => {
   socket.on("Chi.TestExt:Greet", (message, refID) => {
     socket.emit("reply", `> ${message.content} \nちーっす！`, refID);
   });
+  socket.emit("registerCommand", { name: "angry" });
+  let angryGifList = [
+    "https://media.tenor.com/F1dGunvWdVoAAAAC/nichijou-shinonome.gif",
+    "https://media.tenor.com/BxUBAbffVqsAAAAC/angry-your-lie-in-april.gif",
+    "https://media.tenor.com/F43DiA0jyN4AAAAC/bananice-daiba-nana.gif",
+    "https://i.pinimg.com/originals/15/6d/23/156d23e70421f2f95db2a6fed397ca66.gif",
+    "https://media.tenor.com/X3S0_ADGTjgAAAAC/go-out-seishun-buta-yarou.gif",
+  ];
+  function getRandElement(arr: Array<any>) {
+    return arr[Math.round(Math.random() * arr.length)];
+  }
+  socket.on("commandInteraction", (interaction, refID) => {
+    if (interaction.name == "angry") {
+      socket.emit("interactionReply", getRandElement(angryGifList), refID);
+    }
+  });
 });

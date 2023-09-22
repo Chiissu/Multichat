@@ -47,17 +47,18 @@ export interface ExtController {
 
 export class ExtHandler {
   socket: Server;
+  clients: BaseAdapter[] = [];
   refID = new RefID<any>();
   constructor(controller: ExtController, config?: ExtConfig) {
     // Create Socket here
     this.socket = new Server();
     this.socket.listen(config?.port || 4334);
     this.socket.on("connection", (socket) => {
-      let authData = parseExtInfo(socket.handshake.headers.auth);
-      if (!authData.ok || !controller.extAuth(authData.val)) {
-        console.log(authData.val);
+      let authDataOption = parseExtInfo(socket.handshake.headers.auth);
+      if (authDataOption.err || !controller.extAuth(authDataOption.val))
         return socket.disconnect();
-      }
+
+      let authData = authDataOption.unwrap();
 
       socket.on("reply", (content, refID) => {
         let message = this.refID.get(refID);
@@ -71,17 +72,33 @@ export class ExtHandler {
         message.val.send(content);
       });
 
+      socket.on("registerCommand", (config)=>{
+        for (let client of this.clients) {
+          client.registerCommand(config)
+        }
+      })
+
+      socket.on("interactionReply", (content, refID) => {
+        let interaction = this.refID.get(refID);
+        if (interaction.err) return console.log(interaction.val);
+        interaction.val.reply(content);
+      })
+
       socket.onAny((eventName: string, ...args) => {
-        if (["reply", "sendMessage"].includes(eventName)) return;
+        if (["reply", "sendMessage", "registerCommand", "interactionReply"].includes(eventName)) return;
         this.socket.emit(authData.val.id + ":" + eventName, ...args);
       });
     });
   }
   registerClients(clients: BaseAdapter[]) {
     for (let client of clients) {
+      this.clients.push(client);
       client.on("messageCreate", (message) => {
         this.socket.emit("messageCreate", message, this.refID.cache(message));
       });
+      client.on("commandInteraction", (interaction) => {
+        this.socket.emit("commandInteraction", interaction, this.refID.cache(interaction))
+      })
     }
   }
 }

@@ -75,8 +75,24 @@ export interface Message {
   send: (content: MessageContent) => void;
 }
 
+export interface CommandInteraction {
+  name: string;
+  reply: (content: MessageContent) => void;
+}
+
+export interface CommandInfo {
+  name: string;
+  description?: string;
+  adminOnly?: boolean;
+}
+
 export type AdapterEvents = {
   messageCreate: [message: Message];
+  commandInteraction: [interaction: CommandInteraction];
 };
 
-export class BaseAdapter extends Emitter<AdapterEvents> {}
+export class ConcreteBaseAdapter extends Emitter<AdapterEvents> {}
+
+export abstract class BaseAdapter extends ConcreteBaseAdapter {
+  registerCommand(commandInfo: CommandInfo): void {}
+}

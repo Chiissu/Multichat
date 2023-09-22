@@ -37,7 +37,8 @@ if (RUN.indexOf("DJS") != -1) {
     console.log(`Logged in to Discord as ${c.user.tag}`);
   });
   djs.login(process.env.DISCORD_TOKEN);
-  clients.push(new DjsAdapter(djs));
+  if (!process.env.DISCORD_ID) throw "DISCORD_ID is not found in .env"
+  clients.push(new DjsAdapter(djs, process.env.DISCORD_ID));
 }
 
 // Example of adding Guilded to the Extension Protocol
