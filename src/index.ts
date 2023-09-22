@@ -1,11 +1,12 @@
-export { DjsAdapter } from "./adapters/djs";
-export { GuildedAdapter } from "./adapters/guilded";
 import { BaseAdapter } from "./adapters";
-export { BaseAdapter };
-export { Embed } from "./adapters";
 import { Server } from "socket.io";
 import RefID from "./refID";
 import { Result, Ok, Err } from "ts-results";
+
+export { DjsAdapter } from "./adapters/djs";
+export { GuildedAdapter } from "./adapters/guilded";
+export { BaseAdapter };
+export { Embed } from "./adapters";
 
 interface ExtConfig {
   port?: number;
@@ -69,6 +70,7 @@ export class ExtHandler {
         if (message.err) return console.error(message.val);
         message.val.send(content);
       });
+
       socket.onAny((eventName: string, ...args) => {
         if (["reply", "sendMessage"].includes(eventName)) return;
         this.socket.emit(authData.val.id + ":" + eventName, ...args);
