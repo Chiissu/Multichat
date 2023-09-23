@@ -1,15 +1,30 @@
-import { MessageContent, Embed } from "../";
+import { MessageContent, Embed, EmbedDataSchema, EmbedData } from "../";
 import { Embed as GuildedEmbed } from "guilded.js";
+import { safeParse } from "valibot";
+import {} from "discord.js";
 
-export function contentToMessage(content: MessageContent) {
+export function messageRebuild(content: MessageContent) {
   if (typeof content == "string") return content;
+
+  if (!content)
+    return console.log(
+      "Type Error: Embed data is invalid and has been blocked",
+    );
+
   if ((content as { baseU64: string }).baseU64)
     return console.log("Message content of non-string is not yet supported");
+
   // is embed
-  return { embeds: [embedRebuild(content as Embed)] };
+  let embedParsed = safeParse(EmbedDataSchema, content);
+  if (!embedParsed.success)
+    return console.log(
+      "Type Error: Embed data is invalid and has been blocked by Valibot",
+    );
+  return { embeds: [embedRebuild(embedParsed.output)] };
 }
 
-export function embedRebuild(embed: Embed) {
+export function embedRebuild(embedData: EmbedData) {
+  let embed = new Embed(embedData);
   let guildedEmbed = new GuildedEmbed({
     title: embed.title,
     url: embed.link,

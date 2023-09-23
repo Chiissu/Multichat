@@ -1,6 +1,6 @@
 import { Message } from "../";
 import { Client, UserType, Message as GuildedMessage } from "guilded.js";
-import { contentToMessage } from "./toPlatform";
+import { messageRebuild } from "./toPlatform";
 
 export function adaptMessage(message: GuildedMessage, client: Client): Message {
   return {
@@ -21,11 +21,11 @@ export function adaptMessage(message: GuildedMessage, client: Client): Message {
     },
     id: message.id,
     reply: (content) => {
-      let remappedContent = contentToMessage(content);
+      let remappedContent = messageRebuild(content);
       remappedContent && message.reply(remappedContent);
     },
     send: (content) => {
-      let remappedContent = contentToMessage(content);
+      let remappedContent = messageRebuild(content);
       remappedContent && message.send(remappedContent);
     },
   };

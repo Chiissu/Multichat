@@ -1,7 +1,8 @@
-import { BaseAdapter } from "./adapters";
+import { BaseAdapter, CommandInfoSchema } from "./adapters";
 import { Server } from "socket.io";
 import RefID from "./refID";
 import { Result, Ok, Err } from "ts-results";
+import { safeParse } from "valibot";
 
 export { DjsAdapter } from "./adapters/djs";
 export { GuildedAdapter } from "./adapters/guilded";
@@ -75,12 +76,21 @@ export class ExtHandler {
         message.val.send(content);
       });
 
-      socket.on("registerCommand", (config) => {
-        if (!controller.canRegisterCommand(authData)) return;
+      socket.on("registerCommand", (rawConfig) => {
+        if (!controller.canRegisterCommand(authData))
+          return console.warn(
+            "Permission Error: Block an unauthorised extension from registering command",
+          );
+        let config = safeParse(CommandInfoSchema, rawConfig);
+        if (!config.success)
+          return console.error(
+            "Type Error: Command info is invalid and has been blocked by Valibot",
+          );
+        let commandInfo = config.output;
         for (let client of this.clients) {
-          client.registerCommand(config);
+          client.registerCommand(commandInfo);
           client.on("commandInteraction", (interaction) => {
-            if (interaction.name != config.name) return;
+            if (interaction.name != commandInfo.name) return;
             this.socket.emit(
               "commandInteraction",
               interaction,

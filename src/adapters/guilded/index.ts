@@ -1,7 +1,7 @@
 import { BaseAdapter, CommandInfo, ConcreteBaseAdapter } from "../";
 import { Client } from "guilded.js";
 import { adaptMessage } from "./toCommon";
-import { contentToMessage } from "./toPlatform";
+import { messageRebuild } from "./toPlatform";
 
 export class GuildedAdapter extends ConcreteBaseAdapter implements BaseAdapter {
   commands: string[] = [];
@@ -16,7 +16,7 @@ export class GuildedAdapter extends ConcreteBaseAdapter implements BaseAdapter {
           return this.emit("commandInteraction", {
             name: command,
             reply: (content) => {
-              let remappedContent = contentToMessage(content);
+              let remappedContent = messageRebuild(content);
               remappedContent && message.reply(remappedContent);
             },
           });
