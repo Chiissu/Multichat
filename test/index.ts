@@ -37,7 +37,8 @@ if (RUN.indexOf("DJS") != -1) {
     console.log(`Logged in to Discord as ${c.user.tag}`);
   });
   djs.login(process.env.DISCORD_TOKEN);
-  clients.push(new DjsAdapter(djs));
+  if (!process.env.DISCORD_ID) throw "DISCORD_ID is not found in .env";
+  clients.push(new DjsAdapter(djs, process.env.DISCORD_ID));
 }
 
 // Example of adding Guilded to the Extension Protocol
@@ -52,7 +53,7 @@ if (RUN.indexOf("GUILDED") != -1 && process.env.GUILDED_TOKEN) {
 
 // Start the extension protocol
 let controller: ExtController = {
-  extAuth: (extInfo) => {
+  extAuth(extInfo) {
     if (extInfo.id == "Chi.TestExt" && extInfo.token == "test-token") {
       console.log("Test extension connected");
       return true;
@@ -62,8 +63,14 @@ let controller: ExtController = {
     );
     return false;
   },
+  canRegisterCommand() {
+    return true;
+  },
 };
-new ExtHandler(controller, { port: PORT }).registerClients(clients);
+new ExtHandler(controller, {
+  port: PORT,
+  fallbackPrefix: "fnw!",
+}).registerClients(clients);
 
 // Launch example extension
 const workerURL = new URL("testExt.ts", import.meta.url).href;
