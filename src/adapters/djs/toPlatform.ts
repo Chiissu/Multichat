@@ -6,7 +6,7 @@ export function messageRebuild(content: MessageContent) {
   if (typeof content == "string") return content;
 
   if (!content)
-    return console.log(
+    return console.warn(
       "Type Error: Embed data is invalid and has been blocked",
     );
 
@@ -16,7 +16,7 @@ export function messageRebuild(content: MessageContent) {
   // is embed
   let embedParsed = safeParse(EmbedDataSchema, content);
   if (!embedParsed.success)
-    return console.log(
+    return console.warn(
       "Type Error: Embed data is invalid and has been blocked by Valibot",
     );
   return { embeds: [embedRebuild(embedParsed.output)] };

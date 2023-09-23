@@ -83,7 +83,7 @@ export class ExtHandler {
           );
         let config = safeParse(CommandInfoSchema, rawConfig);
         if (!config.success)
-          return console.error(
+          return console.warn(
             "Type Error: Command info is invalid and has been blocked by Valibot",
           );
         let commandInfo = config.output;
