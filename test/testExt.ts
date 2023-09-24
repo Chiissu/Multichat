@@ -7,7 +7,11 @@ let auth = {
   token: "test-token", // Normally, the token should be in a .env file
 };
 
+declare var self: Worker;
+
 self.addEventListener("message", (config) => {
+  console.log("[Ext]: Connecting to extension host...");
+
   let socket = io("ws://localhost:" + config.data.port, {
     extraHeaders: { auth: JSON.stringify(auth) },
   });
@@ -76,6 +80,10 @@ self.addEventListener("message", (config) => {
       );
 
     if (message.content == "Chiissu!") socket.emit("Greet", message, refID);
+
+    if (message.content == "send bad embed") socket.emit("reply", {}, refID);
+    if (message.content == "register bad event")
+      socket.emit("registerCommand", {});
   });
   socket.on("Chi.TestExt:Greet", (message, refID) => {
     socket.emit("reply", `> ${message.content} \nちーっす！`, refID);

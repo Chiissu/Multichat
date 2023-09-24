@@ -1,4 +1,15 @@
 import { Emitter } from "strict-event-emitter";
+import {
+  string,
+  object,
+  optional,
+  Input,
+  union,
+  array,
+  boolean,
+  date,
+  number,
+} from "valibot";
 
 export type MessageContent = string | { baseU64: string } | Embed;
 
@@ -9,18 +20,38 @@ export interface User {
   avatarURL: string | null;
 }
 
-interface EmbedData {
-  author?: { name: string; link?: string; icon?: string } | string;
-  title?: string;
-  link?: string;
-  description?: string;
-  thumbnail?: string | { url: string };
-  contents?: Array<{ key?: string; value: string; inline?: boolean } | string>;
-  image?: string | { url: string };
-  footer?: string | { text: string; icon?: string };
-  timestamp?: true | Date | string | number;
-  color?: number;
-}
+export const EmbedDataSchema = object({
+  author: union([
+    object({
+      name: string(),
+      link: optional(string()),
+      icon: optional(string()),
+    }),
+    string(),
+  ]),
+  title: optional(string()),
+  link: optional(string()),
+  description: optional(string()),
+  thumbnail: optional(union([string(), object({ url: string() })])),
+  contents: array(
+    union([
+      string(),
+      object({
+        value: string(),
+        key: optional(string()),
+        inline: optional(boolean()),
+      }),
+    ]),
+  ),
+  image: optional(union([string(), object({ url: string() })])),
+  footer: optional(
+    union([string(), object({ text: string(), icon: optional(string()) })]),
+  ),
+  timestamp: optional(union([boolean(), date(), string(), number()])),
+  color: optional(number()),
+});
+
+export type EmbedData = Input<typeof EmbedDataSchema>;
 
 export class Embed implements EmbedData {
   author;
@@ -80,11 +111,13 @@ export interface CommandInteraction {
   reply: (content: MessageContent) => void;
 }
 
-export interface CommandInfo {
-  name: string;
-  description?: string;
-  adminOnly?: boolean;
-}
+export const CommandInfoSchema = object({
+  name: string(),
+  description: optional(string()),
+  adminOnly: optional(boolean()),
+});
+
+export type CommandInfo = Input<typeof CommandInfoSchema>;
 
 export type AdapterEvents = {
   messageCreate: [message: Message];
