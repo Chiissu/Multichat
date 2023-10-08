@@ -1,8 +1,8 @@
 import { BaseAdapter, CommandInfoSchema } from "./adapters";
 import { Server } from "socket.io";
-import RefID from "./refID";
 import { Result, Ok, Err } from "ts-results";
-import { safeParse } from "valibot";
+import { object, optional, safeParse, string } from "valibot";
+import { safeParse as froxParse, RefID } from "./frox.js";
 
 export { DjsAdapter } from "./adapters/djs";
 export { GuildedAdapter } from "./adapters/guilded";
@@ -19,6 +19,12 @@ interface ExtInfo {
   token?: string;
   [key: string]: any;
 }
+
+const ExtConfigsSchema = optional(
+  object({
+    fallbackPrefix: optional(string()),
+  }),
+);
 
 function parseExtInfo(
   input: any,
@@ -61,6 +67,18 @@ export class ExtHandler {
       let authDataOption = parseExtInfo(socket.handshake.headers.auth);
       if (authDataOption.err || !controller.extAuth(authDataOption.val))
         return socket.disconnect();
+
+      // TODO: Use the config
+      let extConfig = froxParse(
+        ExtConfigsSchema,
+        socket.handshake.headers.config,
+      )
+        .addDefault({
+          fallbackPrefix: this.config.fallbackPrefix ?? "!",
+        })
+        .unwrapOrDefault(() => {
+          socket.emit("error", "Invalid config");
+        });
 
       let authData = authDataOption.unwrap();
 

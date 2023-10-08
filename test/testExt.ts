@@ -6,6 +6,9 @@ let auth = {
   id: "Chi.TestExt",
   token: "test-token", // Normally, the token should be in a .env file
 };
+let extConfig = {
+  fallbackPrefix: "fnwte!",
+};
 
 declare var self: Worker;
 
@@ -13,7 +16,10 @@ self.addEventListener("message", (config) => {
   console.log("[Ext]: Connecting to extension host...");
 
   let socket = io("ws://localhost:" + config.data.port, {
-    extraHeaders: { auth: JSON.stringify(auth) },
+    extraHeaders: {
+      auth: JSON.stringify(auth),
+      config: JSON.stringify(extConfig),
+    },
   });
   socket.on("connect", () => {
     console.log("[Ext]: Connected to extension host");
