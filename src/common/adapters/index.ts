@@ -94,6 +94,7 @@ export class Embed implements EmbedData {
 }
 
 export interface Message {
+  type: "Message";
   platform: "discord" | "guilded";
   content: string;
   author: User;
@@ -107,7 +108,9 @@ export interface Message {
 }
 
 export interface CommandInteraction {
+  type: "CommandInteraction";
   name: string;
+  send: (content: MessageContent) => void;
   reply: (content: MessageContent) => void;
 }
 
@@ -124,10 +127,13 @@ export type AdapterEvents = {
   commandInteraction: [interaction: CommandInteraction];
 };
 
-export class ConcreteBaseAdapter extends Emitter<AdapterEvents> {
-  fallbackPrefix: string;
+export class BaseAdapter extends Emitter<AdapterEvents> {
+  static eventList: (keyof AdapterEvents)[] = [
+    "messageCreate",
+    "commandInteraction",
+  ];
 }
 
-export abstract class BaseAdapter extends ConcreteBaseAdapter {
+export abstract class Platform extends BaseAdapter {
   registerCommand(commandInfo: CommandInfo): void {}
 }

@@ -5,11 +5,11 @@ import {
   Routes,
   SlashCommandBuilder,
 } from "discord.js";
-import { BaseAdapter, CommandInfo, ConcreteBaseAdapter } from "../";
+import { Platform, CommandInfo, BaseAdapter } from "../";
 import { adaptMessage } from "./toCommon";
 import { messageRebuild } from "./toPlatform";
 
-export class DjsAdapter extends ConcreteBaseAdapter implements BaseAdapter {
+export class DjsAdapter extends BaseAdapter implements Platform {
   client: Client;
   rest: REST;
   clientID: string;

@@ -1,9 +1,9 @@
-import { BaseAdapter, CommandInfo, ConcreteBaseAdapter } from "../";
+import { Platform, CommandInfo, BaseAdapter } from "../";
 import { Client } from "guilded.js";
 import { adaptMessage } from "./toCommon";
 import { messageRebuild } from "./toPlatform";
 
-export class GuildedAdapter extends ConcreteBaseAdapter implements BaseAdapter {
+export class GuildedAdapter extends BaseAdapter implements Platform {
   commands: string[] = [];
   constructor(client: Client) {
     super();

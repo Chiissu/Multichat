@@ -1,27 +1,20 @@
-// This file is only an example of how to use the extension system, please
-// see the src/ directory for the source.
+import { MtcHost } from "../src";
+import { Platform } from "../src/common/adapters";
 import {
   Client as DjsClient,
   Events as DjsEvents,
   GatewayIntentBits as DjsGatewayIntentBits,
 } from "discord.js";
 import { Client as GuildedClient } from "guilded.js";
-import {
-  ExtHandler,
-  DjsAdapter,
-  GuildedAdapter,
-  ExtController,
-  BaseAdapter,
-} from "../src";
+import { DjsAdapter } from "../src/common/adapters/discord.js";
+import { GuildedAdapter } from "../src/common/adapters/guilded.js";
 import { readFileSync } from "fs";
-import "dotenv/config";
+import { Err, Ok } from "ts-results";
 
 console.log(readFileSync(import.meta.dir + "/Chiissu").toString());
-
-const PORT = 4664;
 const RUN = ["GUILDED", "DJS"];
 
-let clients: BaseAdapter[] = [];
+let platforms: Platform[] = [];
 
 if (RUN.indexOf("DJS") != -1) {
   // Example of adding DiscordJS to the Extension Protocol
@@ -38,7 +31,7 @@ if (RUN.indexOf("DJS") != -1) {
   });
   djs.login(process.env.DISCORD_TOKEN);
   if (!process.env.DISCORD_ID) throw "DISCORD_ID is not found in .env";
-  clients.push(new DjsAdapter(djs, process.env.DISCORD_ID));
+  platforms.push(new DjsAdapter(djs, process.env.DISCORD_ID));
 }
 
 // Example of adding Guilded to the Extension Protocol
@@ -48,31 +41,18 @@ if (RUN.indexOf("GUILDED") != -1 && process.env.GUILDED_TOKEN) {
     console.log(`Logged in to Guilded as ${guilded.user?.name}`);
   });
   guilded.login();
-  clients.push(new GuildedAdapter(guilded));
+  platforms.push(new GuildedAdapter(guilded));
 }
 
-// Start the extension protocol
-let controller: ExtController = {
-  extAuth(extInfo) {
-    if (extInfo.id == "Chi.TestExt" && extInfo.token == "test-token") {
-      console.log("Test extension connected");
-      return true;
-    }
-    console.log(
-      `Extensions ${extInfo.id} has invalid authentication, kicking extension`,
-    );
-    return false;
-  },
-  canRegisterCommand() {
-    return true;
-  },
-};
-new ExtHandler(controller, {
-  port: PORT,
-  fallbackPrefix: "fnw!",
-}).registerClients(clients);
+// This is on the host side
+const PORT = 4289
+let app = new MtcHost();
+app.registerPlatforms(platforms);
+app.socket.start(PORT).validator = (extInfo) =>
+  extInfo.id === "Chi.TestExt"
+    ? Ok({ registerGlobalCommands: true, customEvents: true })
+    : Err(405);
 
-// Launch example extension
 const workerURL = new URL("testExt.ts", import.meta.url).href;
 const worker = new Worker(workerURL);
 worker.postMessage({ port: PORT });
