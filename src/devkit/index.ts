@@ -1,23 +1,7 @@
 import { io, Socket } from "socket.io-client";
 import { Emitter } from "strict-event-emitter";
-import { AdapterEvents, Message } from "../common/adapters";
 import { Events, ExtConfig } from "./protocol";
-
-class Remapper {
-  socket: Socket;
-  constructor(socket: Socket) {
-    this.socket = socket;
-  }
-  message(refID: string, message: Message) {
-    message.send = (content) => {
-      this.socket.emit("send", refID, content);
-    };
-    message.reply = (content) => {
-      this.socket.emit("reply", refID, content);
-    };
-    return message;
-  }
-}
+import { Remapper } from "./remapper";
 
 export class MtcClient extends Emitter<Events> {
   private socket: Socket;
@@ -31,20 +15,24 @@ export class MtcClient extends Emitter<Events> {
     });
 
     this.remapper = new Remapper(this.socket);
+
     this.socket.on("connect", () => {
       this.emit("connect");
+
       this.socket.on("messageCreate", (refID, message) => {
-        this.emit("messageCreate", this.remapper.message(refID, message));
+        this.remapper.newMessage(refID, message);
+        this.emit("messageCreate", message);
       });
     });
+
     this.socket.on("disconnect", () => {
       this.emit("disconnect");
     });
+
     this.socket.on("connect_error", (err) => {
-      console.log(err);
+      console.error(err);
     });
   }
-  registerGlobalCommand() {}
   disconnect() {
     this.socket.disconnect();
   }

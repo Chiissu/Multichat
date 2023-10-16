@@ -8,10 +8,8 @@ import {
 import { Client as GuildedClient } from "guilded.js";
 import { DjsAdapter } from "../src/common/adapters/discord.js";
 import { GuildedAdapter } from "../src/common/adapters/guilded.js";
-import { readFileSync } from "fs";
 import { Err, Ok } from "ts-results";
 
-console.log(readFileSync(import.meta.dir + "/Chiissu").toString());
 const RUN = ["GUILDED", "DJS"];
 
 let platforms: Platform[] = [];
