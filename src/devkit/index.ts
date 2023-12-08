@@ -17,7 +17,7 @@ export class MtcClient extends Emitter<Events> {
     this.remapper = new Remapper(this.socket);
 
     this.socket.on("connect", () => {
-      this.emit("connect");
+      this.emit("ready");
 
       this.socket.on("messageCreate", (refID, message) => {
         this.remapper.newMessage(refID, message);

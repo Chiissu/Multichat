@@ -5,7 +5,7 @@ import {
   CommandInteraction,
   Message,
   Platform,
-} from "../common/adapters";
+} from "../adapters";
 import { RefID } from "../froxKit";
 
 export interface SocketConfig {

@@ -1,13 +1,13 @@
 import { MtcHost } from "../src";
-import { Platform } from "../src/common/adapters";
+import { Platform } from "../src/adapters";
 import {
   Client as DjsClient,
   Events as DjsEvents,
   GatewayIntentBits as DjsGatewayIntentBits,
 } from "discord.js";
 import { Client as GuildedClient } from "guilded.js";
-import { DjsAdapter } from "../src/common/adapters/discord.js";
-import { GuildedAdapter } from "../src/common/adapters/guilded.js";
+import { DjsAdapter } from "../src/adapters/discord.js";
+import { GuildedAdapter } from "../src/adapters/guilded.js";
 import { Err, Ok } from "ts-results";
 
 const RUN = ["GUILDED", "DJS"];

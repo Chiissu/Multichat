@@ -95,7 +95,11 @@ export class Embed implements EmbedData {
 
 export interface Message {
   type: "Message";
-  platform: "discord" | "guilded";
+  platform: {
+    name: "discord" | "guilded" | string;
+    host: string;
+    id: string;
+  }
   content: string;
   author: User;
   mentions: {

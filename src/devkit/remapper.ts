@@ -1,16 +1,15 @@
 import { Socket } from "socket.io-client";
-import { Message } from "../common/adapters";
+import { Message } from "../adapters";
 
 export class Remapper {
-  socket: Socket;
+  private socket: Socket;
   constructor(socket: Socket) {
     this.socket = socket;
   }
   newMessage(refID: string, message: Message) {
-    this.propAppend.send(refID, message);
-    this.propAppend.reply(refID, message);
+    this.propAppend(refID, message, ["send", "reply"]);
   }
-  private propAppend = {
+  private appenders = {
     send: (refID: string, obj: any) => {
       obj.send = (content: any) => {
         this.socket.emit("send", refID, content);
@@ -22,4 +21,13 @@ export class Remapper {
       };
     },
   };
+  private propAppend(
+    refID: string,
+    obj: any,
+    props: (keyof typeof this.appenders)[],
+  ) {
+    for (let prop of props) {
+      this.appenders[prop](refID, obj);
+    }
+  }
 }

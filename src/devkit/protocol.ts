@@ -1,4 +1,4 @@
-import { AdapterEvents } from "../common/adapters";
+import { AdapterEvents } from "../adapters";
 
 export interface ExtConfig {
   id: string;
@@ -6,6 +6,6 @@ export interface ExtConfig {
 }
 
 export type Events = AdapterEvents & {
-  connect: [];
+  ready: [];
   disconnect: [];
 };

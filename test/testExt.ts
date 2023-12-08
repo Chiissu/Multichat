@@ -11,9 +11,9 @@ self.addEventListener("message", (config) => {
     id: "Chi.TestExt",
   });
 
-  app.on("connect", ()=>{
-	console.log("[Ext]: Connected to extension host")
-  })
+  app.on("ready", () => {
+    console.log("[Ext]: Connected to extension host");
+  });
 
   app.on("messageCreate", (message) => {
     if (message.content.toLowerCase() === "ping") message.send("pong");

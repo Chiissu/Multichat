@@ -20,6 +20,7 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
+    "elysia": "^0.7.21",
     "socket.io": "^4.7.2",
     "strict-event-emitter": "^0.5.0",
     "ts-results": "^3.3.0",
