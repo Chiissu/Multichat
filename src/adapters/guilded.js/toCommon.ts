@@ -4,7 +4,8 @@ import { messageRebuild } from "./toPlatform";
 
 export function adaptMessage(message: GuildedMessage, client: Client): Message {
   return {
-    platform: "guilded",
+    type: "Message",
+    platform: {name: "guilded", host: "guilded.gg"},
     content: message.content as string,
     author: {
       name: message.author?.name ?? null,

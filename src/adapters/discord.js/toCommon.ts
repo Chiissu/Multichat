@@ -4,7 +4,8 @@ import { messageRebuild } from "./toPlatform";
 
 export function adaptMessage(message: DiscordMessage, client: Client): Message {
   return {
-    platform: "discord",
+    type: "Message",
+    platform: { name: "Discord", host: "discord.com" },
     content: message.content,
     author: {
       name: message.author.displayName,

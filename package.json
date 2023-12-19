@@ -1,5 +1,6 @@
 {
   "name": "multichat",
+  "version": "0.4",
   "module": "src/index.ts",
   "type": "module",
   "homepage": "https://github.com/Chiissu/multichat",
