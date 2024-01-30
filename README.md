@@ -6,7 +6,7 @@ Brought to you by ChiissuOrg and the [Nebula Team](https://discord.gg/7RdABJhQss
 > merged. Therefore, I decided to repurpose it into a standalone library.
 > \- Frox
 
-Note that this codebase is still very immature. A lot of features are still missing.
+Note that this codebase is still very immature, expect breaking changes.
 
 ## Get started
 
@@ -39,6 +39,6 @@ bun run start
 
 ## License
 
-Copyright Froxcey 2023, all rights reserved.
+Copyright Chiissu 2023~2024, all rights reserved.
 
-Unauthorised use of this software may result in legal actions.
+Unauthorized use of this software can and will result in legal actions.
