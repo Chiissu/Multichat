@@ -55,6 +55,9 @@ export interface Message {
 
 export type AdapterEvents = {
   messageCreate: [message: Message];
+  commandRan: [
+    interaction: { name: string; reply: (content: MessageContent) => void },
+  ];
 };
 
 export class BaseAdapter extends Emitter<AdapterEvents> {
