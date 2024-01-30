@@ -1,5 +1,6 @@
 {
-  "name": "multichat",
+  "name": "@chiissu/multichat",
+  "version": "0.4",
   "module": "src/index.ts",
   "type": "module",
   "homepage": "https://github.com/Chiissu/multichat",
@@ -13,16 +14,17 @@
     "discord.js": "^14.13.0",
     "dotenv": "^16.3.1",
     "guilded.js": "^0.23.5",
-    "prettier": "^3.0.3",
-    "socket.io-client": "^4.7.2"
+    "prettier": "^3.0.3"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
   },
   "dependencies": {
+    "elysia": "^0.7.21",
     "socket.io": "^4.7.2",
     "strict-event-emitter": "^0.5.0",
     "ts-results": "^3.3.0",
-    "valibot": "^0.13.1"
+    "valibot": "^0.13.1",
+    "socket.io-client": "^4.7.2"
   }
 }

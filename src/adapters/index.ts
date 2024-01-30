@@ -1,17 +1,6 @@
 import { Emitter } from "strict-event-emitter";
-import {
-  string,
-  object,
-  optional,
-  Input,
-  union,
-  array,
-  boolean,
-  date,
-  number,
-} from "valibot";
 
-export type MessageContent = string | { baseU64: string } | Embed;
+export type MessageContent = string;
 
 export interface User {
   name: string | null;
@@ -20,114 +9,61 @@ export interface User {
   avatarURL: string | null;
 }
 
-export const EmbedDataSchema = object({
-  author: union([
-    object({
-      name: string(),
-      link: optional(string()),
-      icon: optional(string()),
-    }),
-    string(),
-  ]),
-  title: optional(string()),
-  link: optional(string()),
-  description: optional(string()),
-  thumbnail: optional(union([string(), object({ url: string() })])),
-  contents: array(
-    union([
-      string(),
-      object({
-        value: string(),
-        key: optional(string()),
-        inline: optional(boolean()),
-      }),
-    ]),
-  ),
-  image: optional(union([string(), object({ url: string() })])),
-  footer: optional(
-    union([string(), object({ text: string(), icon: optional(string()) })]),
-  ),
-  timestamp: optional(union([boolean(), date(), string(), number()])),
-  color: optional(number()),
-});
-
-export type EmbedData = Input<typeof EmbedDataSchema>;
-
-export class Embed implements EmbedData {
-  author;
-  title;
-  link;
-  description;
-  thumbnail;
-  contents;
-  image;
-  footer;
-  timestamp;
-  color;
-  constructor(content: EmbedData) {
-    this.author =
-      typeof content.author == "string"
-        ? { name: content.author }
-        : content.author;
-    this.title = content?.title;
-    this.link = content?.link;
-    this.description = content?.description;
-    this.thumbnail =
-      typeof content?.thumbnail == "string"
-        ? { url: content.thumbnail }
-        : content.thumbnail;
-    this.contents = content?.contents?.map((val) => {
-      return typeof val == "string" ? { value: val } : val;
-    });
-    this.image =
-      typeof content?.image == "string"
-        ? { url: content.image }
-        : content.image;
-    this.footer =
-      typeof content?.footer == "string"
-        ? { text: content.footer }
-        : content.footer;
-    this.timestamp =
-      content?.timestamp == true ? new Date() : content.timestamp;
-    this.color = content?.color;
-  }
-}
-
 export interface Message {
-  platform: "discord" | "guilded";
+  type: "Message";
+  /**
+   * Information on the platform that the message was sent on
+   */
+  platform: {
+    /**
+     * The name of the platform
+     */
+    name: "Discord" | "Guilded" | string;
+    /**
+     * The location of the platform
+     * For decentralised platforms, this might come in handy
+     */
+    host: string;
+  };
   content: string;
   author: User;
   mentions: {
+    /**
+     * True if the bot was mentioned
+     */
     me: boolean;
+    /**
+     * True if everyone got mentioned
+     */
     everyone: boolean;
   };
+  /**
+   * A special id of the message issued by the extension host
+   */
   id: string;
+  /**
+   * Send a reply to the message
+   * @param content The message to reply with
+   */
   reply: (content: MessageContent) => void;
+  /**
+   * Send a message in the same place as the message
+   * @param content The message to send
+   */
   send: (content: MessageContent) => void;
 }
 
-export interface CommandInteraction {
-  name: string;
-  reply: (content: MessageContent) => void;
-}
-
-export const CommandInfoSchema = object({
-  name: string(),
-  description: optional(string()),
-  adminOnly: optional(boolean()),
-});
-
-export type CommandInfo = Input<typeof CommandInfoSchema>;
-
 export type AdapterEvents = {
   messageCreate: [message: Message];
-  commandInteraction: [interaction: CommandInteraction];
+  commandRan: [
+    interaction: { name: string; reply: (content: MessageContent) => void },
+  ];
 };
 
-export class ConcreteBaseAdapter extends Emitter<AdapterEvents> {
-  fallbackPrefix: string;
+export class BaseAdapter extends Emitter<AdapterEvents> {
+  static eventList: (keyof AdapterEvents)[] = ["messageCreate"];
 }
 
-export abstract class BaseAdapter extends ConcreteBaseAdapter {
-  registerCommand(commandInfo: CommandInfo): void {}
+export abstract class Platform extends BaseAdapter {
+  //registerCommand(commandInfo: CommandInfo): void {}
 }

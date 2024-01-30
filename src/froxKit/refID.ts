@@ -1,6 +1,6 @@
 import { Ok, Err, Result } from "ts-results";
 
-export default class refID<itemType> {
+export class RefID<itemType> {
   private lifetime: number;
   private storage: Map<string, itemType> = new Map();
 
