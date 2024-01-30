@@ -43,7 +43,7 @@ if (RUN.indexOf("GUILDED") != -1 && process.env.GUILDED_TOKEN) {
 }
 
 // This is on the host side
-const PORT = 4289
+const PORT = 4289;
 let app = new MtcHost();
 app.registerPlatforms(platforms);
 app.socket.start(PORT).validator = (extInfo) =>

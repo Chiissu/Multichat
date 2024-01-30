@@ -1,5 +1,5 @@
 import { Result } from "ts-results";
-import {SocketRunner} from "../websocket";
+import { SocketRunner } from "../websocket";
 
 export interface PanelConfig {
   port?: number;
@@ -20,15 +20,11 @@ export class PanelRunner {
         const url = new URL(req.url);
 
         if (url.pathname.startsWith("/lib")) {
-          return new Response(
-            Bun.file("src/panel" + url.pathname),
-          );
+          return new Response(Bun.file("src/panel" + url.pathname));
         }
 
         if (url.pathname.startsWith("/api")) {
-          return new Response(
-            
-          )
+          return new Response();
         }
 
         switch (url.pathname) {

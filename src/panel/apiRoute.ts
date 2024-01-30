@@ -1,3 +1,1 @@
-export function handler (req: Request) {
-	
-}
+export function handler(req: Request) {}
