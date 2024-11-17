@@ -1,8 +1,8 @@
 # ![banner](./assets/banner.png)
 
-A social network bot messaging compatibility translation layer, brought to you by ChiissuOrg and the [Nebula Team](https://discord.gg/7RdABJhQss).
+>  This is the Sokora (formerly Nebula) multiplatform spec implemented in TypeScript. This codebase is no longer in use, and has been published under GPL-v3 for everyone to see and use. If you want to use this with more performance and platform support, look forward for a future Sokora release.
 
-> Note that this codebase is still very immature, expect breaking changes.
+A social network bot messaging compatibility translation layer, brought to you by ChiissuOrg and the [Nebula Team](https://discord.gg/7RdABJhQss).
 
 ## Get started
 
@@ -21,7 +21,7 @@ bun i
 bun genEnv
 ```
 
-3. Open .env file and add your tokens
+3. Edit .env file and add your tokens
 
 ```sh
 nvim .env
@@ -32,9 +32,3 @@ nvim .env
 ```sh
 bun run start
 ```
-
-## License
-
-Copyright Chiissu 2023~2024, all rights reserved.
-
-Unauthorized use of this software can and will result in legal actions.
