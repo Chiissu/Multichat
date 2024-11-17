@@ -1,14 +1,19 @@
 import { Socket } from "socket.io-client";
-import { Message } from "../adapters";
+import { MemberJoinEvent, Message } from "../adapters";
 
 export class Remapper {
   private socket: Socket;
   constructor(socket: Socket) {
     this.socket = socket;
   }
+
   newMessage(refID: string, message: Message) {
     this.propAppend(refID, message, ["send", "reply"]);
   }
+  newMemberJoinEvent(refID: string, event: MemberJoinEvent) {
+    this.propAppend(refID, event, ["send"]);
+  }
+
   private appenders = {
     send: (refID: string, obj: any) => {
       obj.send = (content: any) => {

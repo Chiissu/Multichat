@@ -20,4 +20,8 @@ self.addEventListener("message", (config) => {
     if (message.content.toLowerCase() === "frox is a weeb")
       message.reply("NO he is NOT!!!");
   });
+
+  app.on("memberJoin", (event) => {
+    event.send(`Welcome, ${event.member.name}!`)
+  })
 });

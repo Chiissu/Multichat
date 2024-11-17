@@ -2,9 +2,10 @@ import { Server, Socket } from "socket.io";
 import { Result } from "ts-results";
 import {
   BaseAdapter,
-  CommandInteraction,
+  MemberJoinEvent,
   Message,
   Platform,
+  User,
 } from "../adapters";
 import { RefID } from "../froxKit";
 
@@ -34,7 +35,7 @@ export class SocketRunner {
   extensionList: ExtInfo[] = [];
   port: number;
   private unifiedEmitter: BaseAdapter;
-  private cacher: RefID<Message | CommandInteraction>;
+  private cacher: RefID<Message | MemberJoinEvent>;
   constructor(unifiedEmitter: BaseAdapter, config?: SocketConfig) {
     this.port = config?.port || 4289;
     this.socket = new Server();
@@ -78,22 +79,19 @@ export class SocketRunner {
       this.extensionList.push(extInfo);
 
       // Receive events
-      socket.on("send", (id, content) => {
-        let item = this.cacher.get(id);
-        if (item.err) return;
-        item.val.send(content);
-      });
-      socket.on("reply", (id, content) => {
-        let item = this.cacher.get(id);
-        if (item.err) return;
-        item.val.reply(content);
-      });
+      for (let event of ["send", "reply"]) {
+        socket.on(event, (id, ...content) => {
+          let item = this.cacher.get(id);
+          if (item.err) return console.log("Can't find item with id of", id);
+          item.val[event](...content);
+        });
+      }
     });
 
     // Remap events
     for (let eventName of Platform.eventList) {
-      this.unifiedEmitter.on(eventName, (message) => {
-        this.socket.emit(eventName, this.cacher.cache(message), message);
+      this.unifiedEmitter.on(eventName, (obj) => {
+        this.socket.emit(eventName, this.cacher.cache(obj), obj);
       });
     }
 

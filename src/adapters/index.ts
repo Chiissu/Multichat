@@ -53,15 +53,18 @@ export interface Message {
   send: (content: MessageContent) => void;
 }
 
+export type MemberJoinEvent = {
+  member: User;
+  send: (content: MessageContent) => void
+}
+
 export type AdapterEvents = {
   messageCreate: [message: Message];
-  commandRan: [
-    interaction: { name: string; reply: (content: MessageContent) => void },
-  ];
+  memberJoin: [event: MemberJoinEvent];
 };
 
 export class BaseAdapter extends Emitter<AdapterEvents> {
-  static eventList: (keyof AdapterEvents)[] = ["messageCreate"];
+  static eventList: (keyof AdapterEvents)[] = ["messageCreate", "memberJoin"];
 }
 
 export abstract class Platform extends BaseAdapter {

@@ -1,11 +1,9 @@
 import { io, Socket } from "socket.io-client";
 import { Emitter } from "strict-event-emitter";
 import { Events, ExtConfig } from "./protocol";
-import { Remapper } from "./remapper";
 
 export class MtcClient extends Emitter<Events> {
   private socket: Socket;
-  private remapper: Remapper;
   /**
    * Helps you connect to the Nebula extension host
    * @param location The location of the extension host
@@ -19,14 +17,17 @@ export class MtcClient extends Emitter<Events> {
       },
     });
 
-    this.remapper = new Remapper(this.socket);
-
     this.socket.on("connect", () => {
       this.emit("ready");
 
       this.socket.on("messageCreate", (refID, message) => {
-        this.remapper.newMessage(refID, message);
+        this.registerNetFunctions(refID, message, ["send", "reply"])
         this.emit("messageCreate", message);
+      });
+
+      this.socket.on("memberJoin", (refID, message) => {
+        this.registerNetFunctions(refID, message, ["send"])
+        this.emit("memberJoin", message);
       });
     });
 
@@ -52,5 +53,13 @@ export class MtcClient extends Emitter<Events> {
    */
   reconnect() {
     this.socket.connect();
+  }
+
+  private registerNetFunctions(refID: string, obj: any, methods: string[]) {
+    for (let method of methods) {
+      obj[method] = (...args: any[]) => {
+        this.socket.emit(method, refID, ...args)
+      }
+    }
   }
 }

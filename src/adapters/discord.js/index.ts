@@ -1,6 +1,6 @@
 import { Client, REST } from "discord.js";
 import { Platform, BaseAdapter } from "../";
-import { adaptMessage } from "./toCommon";
+import { adaptMessage, adaptUser } from "./toCommon";
 
 export class DjsAdapter extends BaseAdapter implements Platform {
   client: Client;
@@ -11,6 +11,15 @@ export class DjsAdapter extends BaseAdapter implements Platform {
     client.on("messageCreate", (message) => {
       this.emit("messageCreate", adaptMessage(message, client));
     });
+
+    client.on("guildMemberAdd", (member) => {
+      this.emit("memberJoin", {
+        member: adaptUser(member.user, client), send: (msg) => {
+          if (member.user.bot) return;
+          member.dmChannel?.send(msg);
+        }
+      })
+    })
 
     this.client = client;
 

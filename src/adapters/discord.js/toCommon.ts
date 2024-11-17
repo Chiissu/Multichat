@@ -1,5 +1,5 @@
-import { Message } from "../";
-import { Client, Message as DiscordMessage } from "discord.js";
+import { Message, User } from "../";
+import { Client, Message as DiscordMessage, GuildMember, User as DiscordUser } from "discord.js";
 import { messageRebuild } from "./toPlatform";
 
 export function adaptMessage(message: DiscordMessage, client: Client): Message {
@@ -7,12 +7,7 @@ export function adaptMessage(message: DiscordMessage, client: Client): Message {
     type: "Message",
     platform: { name: "Discord", host: "discord.com" },
     content: message.content,
-    author: {
-      name: message.author.displayName,
-      isBot: message.author.bot,
-      id: message.author.id,
-      avatarURL: message.author.avatarURL(),
-    },
+    author: adaptUser(message.author, client),
     mentions: {
       me:
         client.user && message.mentions.members
@@ -30,4 +25,13 @@ export function adaptMessage(message: DiscordMessage, client: Client): Message {
       remappedContent && message.channel.send(remappedContent);
     },
   };
+}
+
+export function adaptUser(user: DiscordUser, client: Client): User {
+  return {
+    name: user.displayName,
+    isBot: user.bot,
+    id: user.id,
+    avatarURL: user.avatarURL(),
+  }
 }

@@ -1,18 +1,14 @@
-import { Message } from "../";
-import { Client, UserType, Message as GuildedMessage } from "guilded.js";
+import { Message, User } from "../";
+import { Client, UserType, Message as GuildedMessage, User as GuildedUser, Member } from "guilded.js";
 import { messageRebuild } from "./toPlatform";
 
 export function adaptMessage(message: GuildedMessage, client: Client): Message {
+
   return {
     type: "Message",
     platform: { name: "guilded", host: "guilded.gg" },
     content: message.content as string,
-    author: {
-      name: message.author?.name ?? null,
-      isBot: message.author?.type == UserType.Bot,
-      id: message.author?.id ?? "",
-      avatarURL: message.author?.avatar ?? null,
-    },
+    author: adaptUser(message.author || client.user!, client),
     mentions: {
       me:
         client.user && message.mentions?.users
@@ -30,4 +26,13 @@ export function adaptMessage(message: GuildedMessage, client: Client): Message {
       remappedContent && message.send(remappedContent);
     },
   };
+}
+
+export function adaptUser(user: GuildedUser, client: Client): User {
+  return {
+    name: user.name,
+    isBot: user.type == UserType.Bot,
+    id: user.id,
+    avatarURL: user.avatar,
+  }
 }
